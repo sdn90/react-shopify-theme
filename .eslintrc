@@ -2,7 +2,9 @@
   "parser": "babel-eslint",
   "rules": {
     "no-var": 0,
-    "react/jsx-uses-react": 0,
   },
-  "plugins": ["react"]
+  "plugins": ["react"],
+  "ecmaFeatures": {
+    "jsx": true
+  }
 }
