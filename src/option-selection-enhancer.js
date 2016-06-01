@@ -1,24 +1,22 @@
-import React from "react";
+import React from 'react';
 import {
   findVariantFromOptions,
   uniqueOptions,
-  firstAvailableVariant
-} from "preamble-utils";
-import _isEmpty from "lodash/isempty";
+  firstAvailableVariant,
+} from 'preamble-utils';
 
 export default function OptionSelectionEnhancer(ComposedComponent) {
-
   return class extends React.Component {
 
     static displayName = 'VariantSelect';
     static propTypes = {
       variants: React.PropTypes.array.isRequired,
       options: React.PropTypes.array.isRequired,
-      initialVariantID: React.PropTypes.number
+      initialVariantID: React.PropTypes.number,
     };
 
     static defaultProps = {
-      initialVariantID: NaN
+      initialVariantID: 0,
     };
 
     constructor(props) {
@@ -37,7 +35,6 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
           available: false,
         },
       };
-
       const initialVariant = this.findInitialVariant() || defaultState;
 
       this.state = {
@@ -46,7 +43,7 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
           option2: initialVariant.option2,
           option3: initialVariant.option3,
         },
-        selectedVariant: initialVariant
+        selectedVariant: initialVariant,
       };
 
       this.handleOptionChange = this.handleOptionChange.bind(this);
@@ -64,12 +61,10 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
       const { variants, initialVariantID } = this.props;
 
       if (initialVariantID) {
-        return variants.filter(variant => {
-          return variant.id === initialVariantID;
-        })[0];
-      } else {
-        return firstAvailableVariant(variants);
+        return variants.filter(variant => variant.id === initialVariantID)[0];
       }
+
+      return firstAvailableVariant(variants);
     }
 
     /**
@@ -85,19 +80,19 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
 
       const optionNumber = options.indexOf(optionName) + 1;
       const selectedOption = {
-        ["option" + optionNumber]: optionValue
+        [`option${optionNumber}`]: optionValue,
       };
       const selectedVariant = findVariantFromOptions(variants, {
         ...this.state.selectedOptions,
-        ...selectedOption
+        ...selectedOption,
       });
 
       const nextState = {
         selectedOptions: {
           ...this.state.selectedOptions,
-          ...selectedOption
+          ...selectedOption,
         },
-        selectedVariant: { ...selectedVariant }
+        selectedVariant: { ...selectedVariant },
       };
 
       this.setState(nextState);
@@ -110,11 +105,7 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
      * @return {boolean}
      */
     addDisabled(selectedVariant) {
-      if (selectedVariant) {
-        return selectedVariant.available ? false : true;
-      } else {
-        return true;
-      }
+      return !selectedVariant.available;
     }
 
     hasVariants() {
@@ -125,11 +116,7 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
       const hasDefaultTitle = this.props.variants[0].title === 'Default Title';
       const hasDefaultOption = this.props.variants[0].option1 === 'Default Title';
 
-      if (hasOneVariant && hasDefaultTitle && hasDefaultOption) {
-        return false;
-      } else {
-        return true;
-      }
+      return !hasOneVariant && !hasDefaultTitle && !hasDefaultOption;
     }
 
     render() {

@@ -1,10 +1,4 @@
 {
   "parser": "babel-eslint",
-  "rules": {
-    "no-var": 0,
-  },
-  "plugins": ["react"],
-  "ecmaFeatures": {
-    "jsx": true
-  }
+  "extends": "airbnb"
 }
