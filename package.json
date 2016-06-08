@@ -1,6 +1,6 @@
 {
   "name": "react-shopify-theme",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React components for Shopify themes",
   "main": "./lib/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build:umd": "webpack src/index.js dist/react-shopify-theme.js && webpack -p src/index.js dist/react-shopify-theme.min.js",
     "clean": "rimraf lib",
     "prepublish": "npm run test && npm run clean && npm run build && npm run build:umd",
-    "test": "mocha --compilers js:babel-register --inline-diffs"
+    "test": "mocha --compilers js:babel-register --inline-diffs test/**"
   },
   "author": "Steven Nguyen",
   "license": "MIT",
