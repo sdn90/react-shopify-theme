@@ -2,94 +2,46 @@ React Shopify Theme
 ======================================
 React components for Shopify themes
 
-## Variant Select
-The VariantSelect component passes down these props to all children
+## OptionSelectionEnhancer
+`OptionSelectionEnhancer` is a [higher order component](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775)
+which handles all the state of an Option Selector.
 
-##### changeHandler (function)
-##### options (array)
-##### selectedOptions (object)
-##### selectedVariant (object)
-##### uniqueOptions (array)
-##### variants (array)
+The enhanced component will require the following props:
 
-### Example
+## variants: object[]
+The array of variants
+## options: string[]
+The array of options
 
-##### templates/product.liquid
+-----------------------------------
 
-```liquid
-<script>
-var PRODUCT_JSON = {{ product | json }};
-</script>
-```
+These props will automatically be passed down to your enhanced component:
 
-##### your-component.jsx
+## addDisabled: boolean
+If the current selected variant is **not** able to be added to the cart.
+
+## changeHandler: function(optionName:string, optionValue:string) : void
+The function to change the current selected variant.
+
+## hasVariants: boolean
+## uniqueOptions: object
+
 ```javascript
-import React from 'react';
-import { VariantSelect } from 'react-shopify-theme';
+import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import { OptionSelectionEnhancer } from 'react-shopify-theme';
 
+const OptionSelector = OptionSelectorEnhancer((props) => {
+  // you can now access the props listed above
+  return <div/>
+});
 
-export default YourComponent extends React.Component {
-  render() {
-    <div>
-      // referencing PRODUCT_JSON set in templates/product.liquid
-      <VariantSelect product={PRODUCT_JSON}/>
-        <YourOptionsContainer/>
-      </VariantSelect>
-    </div>
-  }
-}
-```
-
-##### options-container.jsx
-```javascript
-import React from 'react';
-
-const YourOptionsContainer = (props) => {
-  render() {
-    return (
-      <div>
-
-        {props.uniqueOptions.map((option, value) => {
-
-          return (
-            <YourSelect
-              key={index}
-              name={uniqueOption.name}
-              values={uniqueOption.values}
-              changeHandler={props.changeHandler}/>
-          );
-
-        })}
-
-      </div>
-    );
-  }
-};
-
-export default YourOptionsContainer;
-```
-
-##### select.jsx
-```javscript
-import React from 'react';
-
-const YourSelect = (props) => {
-  return (
-    <div>
-
-      <h6>{props.name}</h6>
-
-      <select onChange={props.changeHandler.bind(null, name)}>
-
-        {props.values.map((value, index) => {
-          return <option key={index} value={value}>{value}</option>
-        })}
-
-      </select>
-
-    </div>
-  );
-};
-
-export default YourSelect;
+// PRODUCT is the output of {{ product | json }} in your Liquid template
+ReactDOM.render(
+  <OptionSelector
+    variants={PRODUCT.variants}
+    options={PRODUCT.options}
+  />,
+  document.getElementById('some-id')
+);
 ```

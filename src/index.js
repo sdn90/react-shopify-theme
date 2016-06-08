@@ -1,5 +1,5 @@
-import VariantSelect from "./variant-select";
+import OptionSelectionEnhancer from './option-selection-enhancer';
 
 export {
-  VariantSelect
+  OptionSelectionEnhancer,
 };
