@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sdn90/react-shopify-theme.svg?branch=master)](https://travis-ci.org/sdn90/react-shopify-theme)
+
 React Shopify Theme
 ======================================
 React components for Shopify themes
