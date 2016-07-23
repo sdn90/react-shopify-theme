@@ -2,41 +2,89 @@
 
 React Shopify Theme
 ======================================
-React components for Shopify themes
+React components for Shopify themes.
 
-## OptionSelectionEnhancer
-`OptionSelectionEnhancer` is a [higher order component](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775)
-which handles all the state of an Option Selector.
+## API
+
+### OptionSelectionEnhancer
+`OptionSelectionEnhancer` is a customizable alternative to Shopify's `option_selection.js`.
+
+`OptionSelectionEnhancer` is a [higher order component](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775).
 
 The enhanced component will require the following props:
 
-## variants: object[]
+#### `variants: object[]`
 The array of variants
-## options: string[]
+#### `options: string[]`
 The array of options
 
 -----------------------------------
 
-These props will automatically be passed down to your enhanced component:
+The new component will receive the following props:
 
-## addDisabled: boolean
+#### `addDisabled: boolean`
 If the current selected variant is **not** able to be added to the cart.
 
-## changeHandler: function(optionName:string, optionValue:string) : void
+#### `changeHandler: function(optionName:string, optionValue:string) : void`
 The function to change the current selected variant.
 
-## hasVariants: boolean
-## uniqueOptions: object
+#### `hasVariants: boolean`
+Whether or not there are multiple variants. Use this to determine whether or not to show input options.
+
+#### `selectedVariant: object`
+The selected variant
+
+#### `uniqueOptions: object[]`
+The unique options and values
+
+```
+[
+  {
+    name: 'Color',
+    values: ['Blue', 'Green', 'Red']
+  },
+  {
+    name: 'Size,
+    values: ['Small', 'Medium', 'Large']
+  }
+]
+```
+
+
+## Example
+> For example purposes, this example uses a `<select>`. You can change this to a radio group, `<div>`, etc.
+> 
+> `props.changeHandler` is just a function that takes an option name (e.g. `Color` or `Size`) and a value (e.g. `Blue` or `Medium`).
 
 ```javascript
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { OptionSelectionEnhancer } from 'react-shopify-theme';
 
-const OptionSelector = OptionSelectorEnhancer((props) => {
-  // you can now access the props listed above
-  return <div/>
-});
+const OptionSelector = OptionSelectorEnhancer((props) => (
+  <div>
+    {props.uniqueOptions.map(option => (
+      <div>
+        <label>{option.name}</label>
+        <select
+          onChange={e => props.changeHandler(option.name, e.target.value)}
+        >
+          {option.map(option => (
+            <option value={option.value}>{option.value</value>
+          ))}
+        </select>
+      </div>
+    ))}
+    
+    {/* Add to Cart button */}
+    <button
+      disabled={props.addDisabled}
+      onClick={e => someClickHandler(props.selectedVariant)}
+    >
+      Add to Cart
+    </button>
+  </div>
+));
 
 // PRODUCT is the output of {{ product | json }} in your Liquid template
 ReactDOM.render(
