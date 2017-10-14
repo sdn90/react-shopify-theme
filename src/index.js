@@ -1,5 +1,3 @@
-import OptionSelectionEnhancer from './option-selection-enhancer';
+import OptionSelectionEnhancer from "./option-selection-enhancer";
 
-export {
-  OptionSelectionEnhancer,
-};
+export { OptionSelectionEnhancer };

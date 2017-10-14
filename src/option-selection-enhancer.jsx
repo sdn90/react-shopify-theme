@@ -1,43 +1,28 @@
-import React, { PropTypes } from 'react';
+import React from "react";
+import PropTypes from "prop-types";
 import {
   findVariantFromOptions,
   uniqueOptions,
-  firstAvailableVariant,
-} from 'preamble-utils';
+  firstAvailableVariant
+} from "preamble-utils";
 
 export default function OptionSelectionEnhancer(ComposedComponent) {
-  return class extends React.Component {
-
-    static displayName = 'OptionSelection';
-    static propTypes = {
-      variants: PropTypes.arrayOf(PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        option1: PropTypes.string.isRequired,
-        available: PropTypes.bool.isRequired,
-      })).isRequired,
-      options: PropTypes.arrayOf(PropTypes.string).isRequired,
-      initialVariantID: PropTypes.number,
-    };
-
-    static defaultProps = {
-      initialVariantID: 0,
-    };
-
+  class EnhancedComponent extends React.Component {
     constructor(props) {
       super(props);
 
       const defaultState = {
         selectedOptions: {
-          option1: '',
-          option2: '',
-          option3: '',
+          option1: "",
+          option2: "",
+          option3: ""
         },
         selectedVariant: {
-          option1: '',
-          option2: '',
-          option3: '',
-          available: false,
-        },
+          option1: "",
+          option2: "",
+          option3: "",
+          available: false
+        }
       };
       const initialVariant = this.findInitialVariant() || defaultState;
 
@@ -45,9 +30,9 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
         selectedOptions: {
           option1: initialVariant.option1,
           option2: initialVariant.option2,
-          option3: initialVariant.option3,
+          option3: initialVariant.option3
         },
-        selectedVariant: initialVariant,
+        selectedVariant: initialVariant
       };
 
       this.handleOptionChange = this.handleOptionChange.bind(this);
@@ -84,19 +69,19 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
 
       const optionNumber = options.indexOf(optionName) + 1;
       const selectedOption = {
-        [`option${optionNumber}`]: optionValue,
+        [`option${optionNumber}`]: optionValue
       };
       const selectedVariant = findVariantFromOptions(variants, {
         ...this.state.selectedOptions,
-        ...selectedOption,
+        ...selectedOption
       });
 
       const nextState = {
         selectedOptions: {
           ...this.state.selectedOptions,
-          ...selectedOption,
+          ...selectedOption
         },
-        selectedVariant: { ...selectedVariant },
+        selectedVariant: { ...selectedVariant }
       };
 
       this.setState(nextState);
@@ -115,8 +100,9 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
 
       // conditions for a product WITH variants
       const hasMultipleVariants = variants.length > 1;
-      const notDefaultTitle = this.props.variants[0].title !== 'Default Title';
-      const notDefaultOption = this.props.variants[0].option1 !== 'Default Title';
+      const notDefaultTitle = this.props.variants[0].title !== "Default Title";
+      const notDefaultOption =
+        this.props.variants[0].option1 !== "Default Title";
 
       return hasMultipleVariants && notDefaultTitle && notDefaultOption;
     }
@@ -135,5 +121,23 @@ export default function OptionSelectionEnhancer(ComposedComponent) {
         />
       );
     }
+  }
+
+  EnhancedComponent.propTypes = {
+    variants: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        option1: PropTypes.string.isRequired,
+        available: PropTypes.bool.isRequired
+      })
+    ).isRequired,
+    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    initialVariantID: PropTypes.number
   };
+
+  EnhancedComponent.defaultProps = {
+    initialVariantID: 0
+  };
+
+  return EnhancedComponent;
 }
